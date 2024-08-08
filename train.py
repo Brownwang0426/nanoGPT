@@ -201,8 +201,10 @@ if init_from == 'resume':
     optimizer.load_state_dict(checkpoint['optimizer'])
 checkpoint = None # free up memory
 
-# compile the model
-if compile:
+if os.name == 'nt':
+    print("WARNING: torch.compile is not supported on Windows")
+    compile = False
+else:
     print("compiling the model... (takes a ~minute)")
     unoptimized_model = model
     model = torch.compile(model) # requires PyTorch 2.0
